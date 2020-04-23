@@ -11,6 +11,7 @@ module.exports = {
   },
   rules: {
     indent: 2,
+    'no-console': 'off',
     'space-before-function-paren': 0,
     'new-cap': 0,
     'prefer-destructuring': [
