@@ -1,9 +1,9 @@
 {
-  "name": "basic-js-workflow",
+  "name": "complete-javascript-course",
   "version": "1.0.0",
-  "description": "Project structure for learning JavaScript",
+  "description": "Vanilla JavaScript course by Jonas Schmedtmann",
   "main": "gulpfile.babel.js",
-  "repository": "git@github.com:YewTreeWeb/basic-js-workflow.git",
+  "repository": "git@github.com:YewTreeWeb/complete-javascript-course.git",
   "author": "Mathew Teague <mathew.teague@yewtreeweb.co.uk>",
   "license": "MIT",
   "scripts": {

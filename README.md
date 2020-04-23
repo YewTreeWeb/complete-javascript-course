@@ -1,3 +1,5 @@
-# Basic starter JS workflow
+# The Complete Javascript Course 2020
+## By Jonas Schmedtmann
 
-This workflow is intended for all my JS courses that I'm learning on vanilla JavaScript. It creates a pre-built project so I can start straight away
+**Course Intro**
+Master JavaScript with the most complete course! Projects, challenges, quizzes, JavaScript ES6+, OOP, AJAX, Webpack
