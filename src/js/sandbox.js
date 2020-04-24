@@ -1,3 +1,6 @@
+/* eslint-disable no-continue */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-shadow */
 /* eslint-disable no-new-object */
 /* eslint-disable dot-notation */
 /* eslint-disable no-array-constructor */
@@ -170,7 +173,8 @@ switch (true) {
  * truthy values: NOT falsy values
  *
  * ==: Does type coercion will convert one value to match another e.g. 23 == '23'
- * ===: strict, does not type coercion
+ * ===: Strict, does not type coercion
+ * !==: Does not equal
  */
 
 // / Coding Challenge 2
@@ -370,12 +374,10 @@ const mat = {
   },
   heightFt: 6.4,
   weightSt: 15.4,
-  calcHeight() {
+  calcMessure() {
     const height = this.heightFt / 3.28
-    this.height = height.toFixed(2)
-  },
-  calcWeight() {
     const mass = this.weightSt * 6.35029318
+    this.height = height.toFixed(2)
     this.weight = mass.toFixed(2)
   },
   calcBMI() {
@@ -387,7 +389,7 @@ const alice = {
   firstName: 'Alice',
   lastName: 'Teague',
   birthYear: 1990,
-  family: ['Alice', 'Lily', 'Mathew', 'Andrew', 'Julie', 'Poppy', 'Clare'],
+  family: ['Lily', 'Mathew', 'Andrew', 'Julie', 'Poppy', 'Clare'],
   job: 'Student Support',
   isMarried: true,
   calcAge() {
@@ -395,12 +397,10 @@ const alice = {
   },
   heightFt: 5.4,
   weightSt: 8,
-  calcHeight() {
+  calcMessure() {
     const height = this.heightFt / 3.28
-    this.height = height.toFixed(2)
-  },
-  calcWeight() {
     const mass = this.weightSt * 6.35029318
+    this.height = height.toFixed(2)
     this.weight = mass.toFixed(2)
   },
   calcBMI() {
@@ -408,10 +408,83 @@ const alice = {
   },
 }
 
-mat.calcHeight()
-mat.calcWeight()
-alice.calcHeight()
-alice.calcWeight()
+mat.calcMessure()
+alice.calcMessure()
 mat.calcBMI()
 alice.calcBMI()
 console.log(mat, alice)
+console.log(mat.bmi, alice.bmi)
+
+if (mat.bmi > alice.bmi) {
+  console.log(`${mat.firstName} had the highest BMI value of ${mat.bmi}`)
+} else if (alice.bmi > mat.bmi) {
+  console.log(`${alice.firstName} had the highest BMI value of ${alice.bmi}`)
+} else {
+  console.log(
+    `Both BMIs are the same Mat's BMI: ${mat.bmi} and Alice's BMI: ${alice.bmi}`
+  )
+}
+
+// Instructor Solution
+const john = {
+  fullName: 'John Smith',
+  mass: 92,
+  height: 1.95,
+  calcBMI() {
+    this.bmi = this.mass / (this.height * this.height)
+    return this.bmi // to call value within an if
+  },
+}
+const mark = {
+  fullName: 'Mark Miller',
+  mass: 78,
+  height: 1.69,
+  calcBMI() {
+    this.bmi = this.mass / (this.height * this.height)
+    return this.bmi // to call value within an if
+  },
+}
+
+if (john.calcBMI() > mark.calcBMI()) {
+  console.log(`${john.fullName} had the highest BMI value of ${john.bmi}`)
+} else if (mark.bmi > john.bmi) {
+  console.log(`${mark.fullName} had the highest BMI value of ${mark.bmi}`)
+} else {
+  console.log(
+    `Both BMIs are the same ${john.fullName}'s BMI: ${john.bmi} and ${mark.fullName}'s BMI: ${mark.bmi}`
+  )
+}
+
+// / Loops and iteration
+
+for (let i = 0; i < person.family.length; i++) {
+  const family = person.family[i]
+  console.log(family)
+}
+
+/**
+ * Iteration example:
+ *
+ * i = 0, 0 < 6 true, log i to console, i++
+ * i = 1, 1 < 6 true, log i to console, i++
+ * ...
+ * i = 5, 5 < 6 true, log i to console, i++
+ * i = 6, 6 < 6 false, exit loop
+ *
+ * for (let i = 0; i < person.family.length; i+= 1) {}
+ */
+
+let i = 0
+while (i < person.family.length) {
+  const family = person.family[i]
+  console.log(family)
+  i += 1
+}
+
+// continue and break statements
+for (let i = 0; i < alice.family.length; i++) {
+  const fam = alice.family[i]
+  if (i === 2) continue
+  if (typeof fam !== 'string') break
+  console.log(fam)
+}
