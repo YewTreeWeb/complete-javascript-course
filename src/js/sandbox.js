@@ -306,6 +306,8 @@ const tipCalculator = (bill) => {
   return Math.round(percentage * bill) // I've round it to stop the crazy decimal points.
 }
 
+// Instructor Solution
+
 const instructorBills = [124, 48, 268]
 const instructorTips = [
   tipCalculator(instructorBills[0]),
@@ -487,4 +489,176 @@ for (let i = 0; i < alice.family.length; i++) {
   if (i === 2) continue
   if (typeof fam !== 'string') break
   console.log(fam)
+}
+
+// / Challenge 5
+
+let percentage
+
+const holiday = {
+  john: {
+    bills: [124, 48, 268, 180, 42],
+    tips: [],
+    finalAmounts: [],
+    calcTips() {
+      for (let i = 0; i < this.bills.length; i++) {
+        const bill = this.bills[i]
+        if (bill < 50) {
+          percentage = 0.2
+        } else if (bill >= 50 && bill < 200) {
+          percentage = 0.15
+        } else {
+          percentage = 0.1
+        }
+        this.tips.push(Math.round(percentage * bill))
+      }
+    },
+    calcAmounts() {
+      this.calcTips()
+      this.bills.forEach((bill, index) => {
+        this.finalAmounts.push(bill + this.tips[index])
+      })
+    },
+  },
+  mark: {
+    bills: [77, 375, 110, 45],
+    tips: [],
+    finalAmounts: [],
+    calcTips() {
+      for (let i = 0; i < this.bills.length; i++) {
+        const bill = this.bills[i]
+        if (bill < 100) {
+          percentage = 0.2
+        } else if (bill >= 100 && bill < 300) {
+          percentage = 0.1
+        } else {
+          percentage = 0.25
+        }
+        this.tips.push(Math.round(percentage * bill))
+      }
+    },
+    calcAmounts() {
+      this.calcTips()
+      this.bills.forEach((bill, index) => {
+        this.finalAmounts.push(bill + this.tips[index])
+      })
+    },
+  },
+}
+
+holiday.john.calcAmounts()
+holiday.mark.calcAmounts()
+
+const averageTips = (name) => {
+  const { tips } = name
+  let averageTip = 0
+
+  name.calcTips()
+  for (let i = 0; i < tips.length; i++) {
+    averageTip += tips[i]
+  }
+  return Math.round(averageTip / tips.length)
+}
+
+const johnAverage = averageTips(holiday.john)
+const markAverage = averageTips(holiday.mark)
+
+console.log(johnAverage)
+console.log(markAverage)
+
+if (johnAverage > markAverage) {
+  console.log(
+    `John paid the highest tips on average! With an average of £${johnAverage}`
+  )
+} else {
+  console.log(
+    `Mark paid the highest tips on average! With an average of £${markAverage}`
+  )
+}
+
+console.log(holiday.john.finalAmounts)
+console.log(holiday.mark.finalAmounts)
+
+// Instructor Solution
+
+const instructorJohn = {
+  fullName: 'John Smith',
+  bills: [124, 48, 268, 180, 42],
+  calcTips() {
+    this.tips = []
+    this.finalValues = []
+    for (let i = 0; i < this.bills.length; i++) {
+      let tipPercent
+      const bill = this.bills[i]
+
+      // Determine percentage based on tipping rules.
+      if (bill < 50) {
+        tipPercent = 0.2
+      } else if (bill >= 50 && bill < 200) {
+        tipPercent = 0.15
+      } else {
+        tipPercent = 0.1
+      }
+
+      // Add results to the corresponing arrays.
+      this.tips[i] = bill * tipPercent
+      this.finalValues[i] = bill + bill * tipPercent
+    }
+  },
+}
+
+instructorJohn.calcTips()
+console.log(instructorJohn)
+
+const instructorMark = {
+  fullName: 'Mark Miller',
+  bills: [77, 375, 110, 45],
+  calcTips() {
+    this.tips = []
+    this.finalValues = []
+    for (let i = 0; i < this.bills.length; i++) {
+      let tipPercent
+      const bill = this.bills[i]
+
+      // Determine percentage based on tipping rules.
+      if (bill < 100) {
+        tipPercent = 0.2
+      } else if (bill >= 100 && bill < 300) {
+        tipPercent = 0.1
+      } else {
+        tipPercent = 0.25
+      }
+
+      // Add results to the corresponing arrays.
+      this.tips[i] = bill * tipPercent
+      this.finalValues[i] = bill + bill * tipPercent
+    }
+  },
+}
+
+instructorMark.calcTips()
+console.log(instructorMark)
+
+const instructorCalcAvg = (tips) => {
+  let sum = 0
+  for (let i = 0; i < tips.length; i++) {
+    // eslint-disable-next-line operator-assignment
+    sum = sum + tips[i]
+  }
+  return Math.round(sum / tips.length) // I've added rounding for easier reading
+}
+
+instructorJohn.average = instructorCalcAvg(instructorJohn.tips)
+instructorMark.average = instructorCalcAvg(instructorMark.tips)
+
+console.log(instructorJohn, instructorMark)
+
+if (instructorJohn.average > instructorMark.average) {
+  console.log(
+    `John paid the highest tips on average! With an average of £${instructorJohn.average}`
+  )
+} else {
+  console.log(
+    `Mark paid the highest tips on average! With an average of £${instructorMark.average}`
+  )
 }
