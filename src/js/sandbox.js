@@ -12,6 +12,7 @@ import 'airbnb-browser-shims'
 
 // Import internals
 import './modules/helpers'
+import './modules/game'
 
 console.log("Let's go!!")
 
