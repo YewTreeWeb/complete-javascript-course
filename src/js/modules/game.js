@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable prefer-const */
 /*
 GAME RULES:
@@ -57,7 +58,6 @@ const init = () => {
   if (process.env.NODE_ENV !== 'production') {
     console.log(gamePlaying)
     console.log(scores)
-    console.log(playerScore)
   }
 }
 
