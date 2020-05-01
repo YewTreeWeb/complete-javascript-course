@@ -13,7 +13,6 @@ GAME RULES:
 let scores
 let roundScore
 let activePlayer
-let score
 let gamePlaying
 let dice = 0
 
@@ -30,28 +29,35 @@ const diceImg = document.querySelector('.dice')
 const init = () => {
   const player1Name = document.getElementById('name-1')
   const player2Name = document.getElementById('name-2')
-  const playerScore = document.querySelector('.player-current-score')
+  const playerCurrentScore = document.querySelectorAll('.player-current-score')
+  const playerScore = document.querySelectorAll('.player-score')
 
   scores = [0, 0]
   roundScore = 0
   activePlayer = 1
-  score = scores[activePlayer - 1]
   gamePlaying = true
   player1Name.textContent = 'Player 1'
   player2Name.textContent = 'Player 2'
-  playerScore.textContent = 0
+  playerCurrentScore.forEach((currentScore) => {
+    currentScore.textContent = 0
+  })
+  playerScore.forEach((score) => {
+    score.textContent = 0
+  })
   player1Panel.classList.remove('winner', 'loser')
   player2Panel.classList.remove('winner', 'loser')
   if (!player1Panel.classList.contains('active')) {
     player1Panel.classList.add('active')
     player2Panel.classList.remove('active')
   }
-  diceImg.style.display = 'block'
+  if (diceImg.style.display.includes('none')) {
+    diceImg.style.display = 'block'
+  }
 
   if (process.env.NODE_ENV !== 'production') {
     console.log(gamePlaying)
     console.log(scores)
-    console.log(score)
+    console.log(playerScore)
   }
 }
 
@@ -99,8 +105,9 @@ roll.addEventListener('click', () => {
     if (process.env.NODE_ENV !== 'production') {
       console.log(`Dice number: ${dice}`)
       console.log(`Active player is: player${activePlayer}`)
-      console.log(`Held scores are: ${score}`)
+      console.log(`Held scores are: ${scores[activePlayer - 1]}`)
       console.log(`current scores are: ${roundScore}`)
+      console.log(scores[0], scores[1])
     }
   }
 })
@@ -109,18 +116,18 @@ roll.addEventListener('click', () => {
 hold.addEventListener('click', () => {
   if (gamePlaying) {
     // Add CURRENT score to GLOBAL score
-    score += roundScore
+    scores[activePlayer - 1] += roundScore
     if (process.env.NODE_ENV !== 'production') {
       console.log(`roundScore is: ${roundScore}`)
-      console.log(`player${activePlayer} score is: ${score}`)
+      console.log(`player${activePlayer} score is: ${scores[activePlayer - 1]}`)
     }
 
     // Update UI
     const playerScore = document.querySelector(`#score-${activePlayer}`)
-    playerScore.textContent = score
+    playerScore.textContent = scores[activePlayer - 1]
 
     // Check if player has won the game
-    if (score >= 100) {
+    if (scores[activePlayer - 1] >= 100) {
       const player = document.querySelector(`.player-${activePlayer}-panel`)
       const playerName = document.querySelector(`#name-${activePlayer}`)
       player.classList.remove('active')
