@@ -6,6 +6,7 @@
 /* eslint-disable no-array-constructor */
 /* eslint-disable no-alert */
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
 
 // Import externals
 import 'airbnb-browser-shims'
@@ -46,5 +47,54 @@ function first() {
   function second() {
     const c = 'Hey!'
     console.log(a + b + c)
+    third() // Second function has access to third due to scoping.
   }
 }
+
+function third() {
+  const d = 'John'
+  // console.log(c) // Cannot access c as the execution chain is different to the scope chain.
+  console.log(a + d) // Can access as they are in the scope chain.
+}
+
+// 'this' variable/keyword
+
+/**
+ * Regular function call: this keyword points at the global object
+ * Method call: this variable points to the object this is calling the method
+ * The this keyword is not assigned a value until a function where it is defined.
+ * The this keyword only becomes something as soon as the object method is called.
+ */
+
+console.log(this) // In global context will be the window object. With Webpack and module scope it will be undefined.
+calculateAge(1989)
+
+function calculateAge(year) {
+  console.log(2020 - year)
+  console.log(this)
+}
+
+const john = {
+  name: 'John',
+  yearOfBirth: 1990,
+  calculateAge() {
+    console.log(this)
+    console.log(2020 - this.yearOfBirth)
+    /*
+    function innerFunction() {
+      console.log(this) // Will go back to being the window object instead of John object. This happens when calling a normal function.
+    }
+    innerFunction()
+    */
+  },
+}
+
+john.calculateAge()
+
+const mike = {
+  name: 'Milke',
+  yearOfBirth: 1984,
+}
+
+mike.calculateAge = john.calculateAge // Method borrowing.
+mike.calculateAge()
