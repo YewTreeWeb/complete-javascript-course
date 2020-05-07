@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable prefer-const */
 /*
 GAME RULES:
@@ -5,7 +6,7 @@ GAME RULES:
 - The game has 2 players, playing in rounds
 - In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score
 - BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
-- The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
+- The player can choose to 'Hold', which means that his ROUND score gets added to his GLOBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
@@ -34,7 +35,8 @@ const gameSettings = document.querySelector('#gameSettings')
 const init = () => {
   const player1Name = document.getElementById('name-1')
   const player2Name = document.getElementById('name-2')
-  const playerScore = document.querySelector('.player-current-score')
+  const playerCurrentScore = document.querySelectorAll('.player-current-score')
+  const playerScore = document.querySelectorAll('.player-score')
 
   scores = [0, 0]
   roundScore = 0
@@ -42,14 +44,21 @@ const init = () => {
   gamePlaying = true
   player1Name.textContent = 'Player 1'
   player2Name.textContent = 'Player 2'
-  playerScore.textContent = 0
+  playerCurrentScore.forEach((currentScore) => {
+    currentScore.textContent = 0
+  })
+  playerScore.forEach((score) => {
+    score.textContent = 0
+  })
   player1Panel.classList.remove('winner', 'loser')
   player2Panel.classList.remove('winner', 'loser')
   if (!player1Panel.classList.contains('active')) {
     player1Panel.classList.add('active')
     player2Panel.classList.remove('active')
   }
-  diceImg.style.display = 'block'
+  if (diceImg.style.display.includes('none')) {
+    diceImg.style.display = 'block'
+  }
   gameSettings.reset()
 
   if (process.env.NODE_ENV !== 'production') {
@@ -141,6 +150,7 @@ roll.addEventListener('click', () => {
       console.log(`Active player is: player${activePlayer}`)
       console.log(`Held scores are: ${scores[activePlayer - 1]}`)
       console.log(`current scores are: ${roundScore}`)
+      console.log(scores[0], scores[1])
     }
   }
 })
