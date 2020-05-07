@@ -94,9 +94,66 @@
           </div>
         </div>
       </section>
-      <section class="section">
+      <section id="gameSection" class="section">
+        <div class="columns is-multiline game-info">
+          <div class="column is-6 rules">
+            <h2>GAME RULES:</h2>
+            <ul>
+              <li>- The game has 2 players, playing in rounds</li>
+              <li>
+                - In each turn, a player rolls a dice as many times as he
+                whishes. Each result get added to his ROUND score
+              </li>
+              <li>
+                - BUT, if the player rolls a 1, all his ROUND score gets lost.
+                After that, it's the next player's turn
+              </li>
+              <li>
+                - The player can choose to 'Hold', which means that his ROUND
+                score gets added to his GLBAL score. After that, it's the next
+                player's turn
+              </li>
+              <li>
+                - The first player to reach 100 points on GLOBAL score wins the
+                game
+              </li>
+            </ul>
+          </div>
+          <div class="column is-6">
+            <form id="gameSettings">
+              <div class="field">
+                <label class="label" for="winningScore"
+                  >Set the games winning score:</label
+                >
+                <div class="control">
+                  <input
+                    class="input"
+                    type="number"
+                    placeholder="100"
+                    id="winningScore"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <label class="checkbox">
+                  <input type="checkbox" id="diceNumber">
+                  Add a second dice
+                </label>
+              </div>
+              <div class="field">
+                <p class="control">
+                  <input
+                    type="submit"
+                    value="Submit"
+                    class="button is-success"
+                  />
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
         <div class="columns game">
-          <div class="column wrapper clearfix">
+          <div class="column is-12 wrapper clearfix">
             <div class="player-1-panel active">
               <div class="player-name" id="name-1">Player 1</div>
               <div class="player-score" id="score-1">0</div>
@@ -125,7 +182,9 @@
               <i class="ion-ios-download-outline"></i>Hold
             </button>
 
-            <img src="/assets/images/dice-5.png" alt="Dice" class="dice" />
+            <input type='text' placeholder="Final score" class="final-score">
+
+            <img src="/assets/images/dice-5.png" alt="Dice" id="firstDice" class="dice" />
           </div>
         </div>
       </section>
