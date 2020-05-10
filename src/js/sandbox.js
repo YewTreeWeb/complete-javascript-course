@@ -664,3 +664,71 @@ if (instructorJohn.average > instructorMark.average) {
     `Mark paid the highest tips on average! With an average of £${instructorMark.average}`
   )
 }
+
+// Advanced JavaScript: Objects and functions
+
+// / Constructors
+
+// / Original way
+// const jeff = {
+//   name: 'Jeff',
+//   yearOfBirth: '1945',
+//   job: 'self employed',
+// }
+
+// / New way using constructors
+class Person {
+  constructor(name, yearOfBirth, job) {
+    this.name = name
+    this.lastName = 'Teague'
+    this.yearOfBirth = yearOfBirth
+    this.job = job
+  }
+
+  calculateAge() {
+    const now = new Date().getFullYear()
+    console.log(now - this.yearOfBirth)
+  }
+
+  retirement() {
+    const yearOfBirth = calculateAge(this.yearOfBirth)
+    const retire = 70 - yearOfBirth
+    if (retire > 0) {
+      console.log(`${this.name} retires in ${retire} years`)
+    } else {
+      console.log(`${this.name} has retired or is due for retirement`)
+    }
+  }
+}
+
+Person.prototype.middleName = 'Morris' // ES5 way
+
+const jeff = new Person('Jeff', 1945, 'self employed')
+jeff.calculateAge()
+jeff.retirement()
+console.log(jeff)
+console.log(jeff.lastName)
+console.log(jeff.middleName)
+
+// / Object create
+
+const personProto = {
+  calculateTheAge() {
+    const now = new Date().getFullYear()
+    console.log(now - this.yearOfBirth)
+  },
+}
+
+const george = Object.create(personProto)
+george.yearOfBirth = 1913
+console.log(george)
+
+const lil = Object.create(personProto, {
+  name: { value: 'Lilian' },
+  yearOfBirth: { value: 1915 },
+  job: { value: 'unknown' },
+})
+
+console.log(lil)
+
+// / Primitives vs objects

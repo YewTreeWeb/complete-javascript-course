@@ -17,8 +17,9 @@ let activePlayer
 let gamePlaying
 let dice = 0
 let anotherDice = 0
-let diceNumber = 1
+let diceNumber
 let winningScore = 100
+let secondDice = document.getElementById('secondDice')
 
 const game = document.querySelector('.wrapper')
 const roll = document.querySelector('.btn-roll')
@@ -42,6 +43,7 @@ const init = () => {
   roundScore = 0
   activePlayer = 1
   gamePlaying = true
+  diceNumber = 1
   player1Name.textContent = 'Player 1'
   player2Name.textContent = 'Player 2'
   playerCurrentScore.forEach((currentScore) => {
@@ -60,6 +62,10 @@ const init = () => {
     diceImg.style.display = 'block'
   }
   gameSettings.reset()
+  diceImg.removeAttribute('id', 'firstDice')
+  if (secondDice) {
+    secondDice.remove()
+  }
 
   if (process.env.NODE_ENV !== 'production') {
     console.log(gamePlaying)
@@ -96,14 +102,14 @@ gameSettings.addEventListener('submit', (e) => {
   if (gameSettings.winningScore.value) {
     winningScore = gameSettings.winningScore.value
   }
-  if (diceNumber !== 1) {
-    let secondDice = document.getElementById('secondDice')
+  if (gameSettings.diceNumber.checked && diceNumber !== 1) {
     if (!secondDice) {
       secondDice = document.createElement('img')
       secondDice.src = '/assets/images/dice-5.png'
       secondDice.setAttribute('alt', 'Dice')
       secondDice.setAttribute('id', 'secondDice')
       secondDice.classList.add('dice')
+      diceImg.setAttribute('id', 'firstDice')
       game.append(secondDice)
     }
     if (!gameSettings.winningScore.value) {
@@ -113,6 +119,11 @@ gameSettings.addEventListener('submit', (e) => {
       console.log(secondDice)
       console.log(winningScore)
     }
+  } else {
+    if (secondDice) {
+      secondDice.remove()
+    }
+    diceImg.removeAttribute('id', 'firstDice')
   }
 })
 
