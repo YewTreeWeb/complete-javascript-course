@@ -1,3 +1,9 @@
+/* eslint-disable max-classes-per-file */
+/* eslint-disable consistent-return */
+/* eslint-disable func-names */
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-else-return */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-continue */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-shadow */
@@ -732,3 +738,228 @@ const lil = Object.create(personProto, {
 console.log(lil)
 
 // / Primitives vs objects
+/**
+ * Variables with primitives hold the data within themselves
+ * Variables with objects don't contain the object but points to the real object.
+ */
+
+// Primitive
+let a = Math.round(Math.random()) + 1
+const b = a
+a = 46
+console.log(a)
+console.log(b)
+
+// Object
+const obj1 = {
+  name: 'Test',
+  age: 35,
+}
+const obj2 = obj1
+obj1.age = 39
+console.log(obj1)
+console.log(obj2)
+
+// Functions
+const ageVar = 28
+const obj3 = {
+  name: 'Jonas',
+  city: 'Lisbon',
+}
+
+const change = (a, b) => {
+  a = 30
+  b.city = 'London'
+}
+
+// When primitvies are passed to functions a copy is created. It will never effect the top level variable
+// When an object is passed a reference that points to the original is passed.
+change(ageVar, obj3)
+
+console.log(ageVar)
+console.log(obj3.city)
+
+// / Pasing functions as arguments
+
+const yearsArray = [1989, 1990, 2000, 2005]
+
+const calcTheAge = (el) => {
+  const now = new Date().getFullYear() - 1
+  return now - el
+}
+
+const fullAges = (el) => {
+  return el >= 18
+}
+
+const arrayCalc = (arr, fn) => {
+  const arrRes = []
+  for (let i = 0; i < arr.length; i++) {
+    arrRes.push(fn(arr[i]))
+  }
+  return arrRes
+}
+
+const maxHeartRate = (el) => {
+  if (el >= 18 && el <= 81) {
+    return Math.round(206.9 - 0.67 * el)
+  } else {
+    return -1
+  }
+}
+
+const agesArray = arrayCalc(yearsArray, calcTheAge)
+console.log(agesArray)
+
+const isFullAges = arrayCalc(agesArray, fullAges)
+console.log(isFullAges)
+
+const heartRate = arrayCalc(agesArray, maxHeartRate)
+console.log(heartRate)
+
+// / Funstions returning functions
+
+const interviewQuestion = (job) => {
+  if (job === 'designer') {
+    return (name) =>
+      console.log(`${name}, can you please explain what UX design is?`)
+  } else if (job === 'teacher') {
+    return (name) => console.log(`What subject do you teach, ${name}?`)
+  } else {
+    return (name) => console.log('What do you do?')
+  }
+}
+
+const teacherQuestion = interviewQuestion('teacher')
+const designerQuestion = interviewQuestion('designer')
+const jobQuestion = interviewQuestion('developer')
+teacherQuestion('Joy')
+designerQuestion('Elodie')
+jobQuestion('Mat')
+
+interviewQuestion('teacher')('Mark')
+
+// / Immediatly invoke function expressions (IIFE)
+
+const game = () => {
+  const score = Math.round(Math.random() * 10) + 1
+  console.log(score >= 5)
+}
+game()
+
+// Running function on load and score var is no longer accessible outside function.
+;((goodLuck) => {
+  const score = Math.round(Math.random() * 10) + 1
+  console.log(score >= 5 - goodLuck)
+})(3)
+
+// / Closures
+
+// Scope chain remains intake
+// Allows function variables to be used long after the function has returned
+// Closures happen automatically
+const retirementYears = (retire) => {
+  const a = ' years left until retirement.'
+  return (yearOfBirth) => {
+    const now = new Date().getFullYear() - 1
+    const age = now - yearOfBirth
+    console.log(retire - age + a)
+  }
+}
+
+const retirementUS = retirementYears(66)
+retirementUS(1989)
+const retirementUK = retirementYears(70)
+retirementUK(1989)
+
+retirementYears(70)(1990)
+
+// Rewritting interview questions with closures
+const questions = (job) => {
+  return (name) => {
+    if (job === 'designer') {
+      console.log(`${name}, can you please explain what UX design is?`)
+    } else if (job === 'teacher') {
+      console.log(`What subject do you teach, ${name}?`)
+    } else {
+      console.log(`${name} what do you do as a ${job}?`)
+    }
+  }
+}
+
+questions('teacher')('Bob')
+questions('developer')('Mat')
+
+// / Bind, call and apply
+
+class Speaker extends Person {
+  constructor(name, yearOfBirth, job) {
+    super(name, yearOfBirth, job)
+    this.time = new Date().getHours()
+  }
+
+  speech(style, time) {
+    let timeOfDay = time
+    if (!time) {
+      if (this.time > 0 && this.time < 12) {
+        timeOfDay = 'morning'
+      } else if (this.time >= 12 && this.time < 18) {
+        timeOfDay = 'afternoon'
+      } else {
+        timeOfDay = 'evening'
+      }
+    }
+    if (style === 'formal') {
+      console.log(
+        `Good ${timeOfDay}, Ladies and gentlemen! I'm ${this.name} a ${
+          this.job
+        } and I'm ${calculateAge(this.yearOfBirth)} years old.`
+      )
+    } else if (style === 'friendly') {
+      console.log(
+        `Yo! I'm ${this.name}, my job is ${this.job} and I'm ${calculateAge(
+          this.yearOfBirth
+        )} years old! Have a great ${timeOfDay}!!`
+      )
+    }
+  }
+}
+
+const karl = new Speaker('Karl Pots', 1987, 'Designer')
+const emily = new Person('Emily Morgan', 1865, 'Bandit')
+
+karl.speech('formal')
+karl.speech('friendly')
+
+karl.speech.call(emily, 'friendly', 'afternoon') // call allows extention
+
+// karl.speech.apply(emily, ['formal']) // Adds an array.
+
+// Bind creates a copy and stores it somewhere
+// Fixes pre-defined values to functions
+// First parameter of bind has to be the this.
+const karlStyle = karl.speech.bind(karl, 'formal')
+const emilyStyle = karl.speech.bind(emily, 'friendly')
+
+karlStyle('evening')
+emilyStyle('morning')
+
+// Extendinf previous example.
+const isAdult = (limit, el) => {
+  return el >= limit
+}
+
+const arrayAgeCalc = (arr, fn) => {
+  const arrRes = []
+  for (let i = 0; i < arr.length; i++) {
+    arrRes.push(fn(arr[i]))
+  }
+  return arrRes
+}
+
+const newAges = arrayAgeCalc(yearsArray, calcTheAge)
+const fullJapan = arrayAgeCalc(newAges, isAdult.bind(this, 20))
+console.log(newAges)
+console.log(fullJapan)
+
+// / Challenge 6
