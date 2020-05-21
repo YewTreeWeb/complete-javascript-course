@@ -1,3 +1,5 @@
+/* eslint-disable radix */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable consistent-return */
 /* eslint-disable func-names */
@@ -848,6 +850,7 @@ const game = () => {
 game()
 
 // Running function on load and score var is no longer accessible outside function.
+// IIFE keeps code safe for example if the code is used and by someone else and they use the same vars then the IIFE vars will be safe and not effected.
 ;((goodLuck) => {
   const score = Math.round(Math.random() * 10) + 1
   console.log(score >= 5 - goodLuck)
@@ -963,3 +966,148 @@ console.log(newAges)
 console.log(fullJapan)
 
 // / Challenge 6
+;(() => {
+  let qScore = 0
+
+  class Question {
+    constructor(question, answer, correct) {
+      this.question = question
+      this.answer = answer
+      this.correct = correct
+    }
+
+    displayQuestion() {
+      console.log(this.question)
+      for (let i = 0; i < this.answer.length; i++) {
+        console.log(this.answer[i])
+      }
+      return this
+    }
+
+    displayAnswer(ans, next) {
+      ans = Number(ans)
+
+      if (ans === this.correct) {
+        console.log('Your on fire! That is the correct answer.')
+        qScore += 1
+      } else {
+        console.log('Aww bad luck old chum, that was the wrong answer.')
+
+        if (qScore > 0) {
+          qScore -= 1
+        }
+      }
+      console.log(typeof ans, ans)
+      console.log(typeof this.correct, this.correct)
+      console.log(`You have a current score of: ${qScore}`)
+    }
+  }
+
+  const q1 = new Question('Is JavaScript cool?', ['0. Yes', '1. No'], 0)
+  const q2 = new Question(
+    'Which answer is correct for the sum of 2+2?',
+    ['0. 2', '1. 6', '2. 3', '3. 4'],
+    3
+  )
+  const q3 = new Question(
+    'What colour is the sun?',
+    ['0. Blue', '1. Green', '2. Yellow'],
+    2
+  )
+
+  const arrQuestions = [q1, q2, q3]
+
+  const nextQuestion = () => {
+    const randomQuestion = Math.round(Math.random() * arrQuestions.length)
+
+    arrQuestions[randomQuestion].displayQuestion()
+
+    const answer = prompt('What is the answer to the console question?')
+    console.log(typeof answer, answer)
+
+    if (answer !== 'exit' && answer !== null && answer !== '') {
+      arrQuestions[randomQuestion].displayAnswer(answer)
+      nextQuestion()
+    }
+  }
+
+  // nextQuestion()
+})()
+
+// / Instructor Solution
+;(function () {
+  function InstructorQuestion(question, answers, correct) {
+    this.question = question
+    this.answers = answers
+    this.correct = correct
+  }
+
+  InstructorQuestion.prototype.showQuestion = function () {
+    console.log(this.question)
+    for (let i = 0; i < this.answers.length; i++) {
+      console.log(`${i}: ${this.answers[i]}`)
+    }
+  }
+  InstructorQuestion.prototype.checkAnswer = function (ans, callback) {
+    let sc
+    if (ans === this.correct) {
+      console.log('Correct answer!')
+      sc = callback(true)
+    } else {
+      console.log('Wrong answer. Try again.')
+      sc = callback(false)
+    }
+
+    this.displayScore(sc)
+  }
+  InstructorQuestion.prototype.displayScore = function (score) {
+    console.log(`Your current score is: ${score}`)
+    console.log('--------------------------------')
+  }
+
+  const instructorQ1 = new InstructorQuestion(
+    'Is JavaScript the coolest programming language in the world?',
+    ['Yes', 'No'],
+    0
+  )
+  const instructorQ2 = new InstructorQuestion(
+    "What is the name of this course's teacher?",
+    ['John', 'Micheal', 'Jonas'],
+    2
+  )
+  const instructorQ3 = new InstructorQuestion(
+    'What best describes coding?',
+    ['Boring', 'Hard', 'Fun', 'Tedius'],
+    2
+  )
+
+  const instructorQuestions = [instructorQ1, instructorQ2, instructorQ3]
+
+  function instructorScore() {
+    let sc = 0
+    return function (correct) {
+      if (correct) {
+        sc++
+      }
+      return sc
+    }
+  }
+
+  const keepScore = instructorScore()
+
+  function instructorNextQuestion() {
+    const n = Math.floor(Math.random() * instructorQuestions.length)
+
+    instructorQuestions[n].showQuestion()
+
+    // parseInt does the same as Number.
+    const instructorAnswer = prompt('Please select the correct answer')
+
+    if (instructorAnswer !== 'exit') {
+      instructorQuestions[n].checkAnswer(parseInt(instructorAnswer), keepScore)
+      instructorNextQuestion()
+    }
+  }
+
+  // instructorNextQuestion()
+})()

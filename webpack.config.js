@@ -8,11 +8,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/,
-      },
-      {
         test: /\.jsx$|\.es6$|\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
@@ -31,9 +26,6 @@ module.exports = {
         },
       },
     ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
   },
   mode: prod ? 'production' : 'development',
   devServer: {
