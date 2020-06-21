@@ -1,2 +1,18 @@
 @import '../vendors/bulma/bulma.sass';
 @import './game';
+
+.box {
+  padding: 30px;
+  text-align: center;
+  font-size: 25px;
+  color: #ffffff;
+  &--green {
+    background-color: lightgreen;
+  }
+  &--red {
+    background-color: palevioletred;
+  }
+  &--blue {
+    background-color: steelblue;
+  }
+}

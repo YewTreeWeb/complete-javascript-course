@@ -1,11 +1,7 @@
-/* eslint-disable radix */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable max-classes-per-file */
-/* eslint-disable consistent-return */
+/* eslint-disable block-scoped-var */
 /* eslint-disable func-names */
-/* eslint-disable prettier/prettier */
-/* eslint-disable no-else-return */
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable vars-on-top */
 /* eslint-disable no-continue */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-shadow */
@@ -14,6 +10,8 @@
 /* eslint-disable no-array-constructor */
 /* eslint-disable no-alert */
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-var */
+/* eslint-disable prefer-template */
 
 // Import externals
 import 'airbnb-browser-shims'
@@ -673,441 +671,113 @@ if (instructorJohn.average > instructorMark.average) {
   )
 }
 
-// Advanced JavaScript: Objects and functions
+/* Next Gen JavaScript */
 
-// / Constructors
+// / let and const
 
-// / Original way
-// const jeff = {
-//   name: 'Jeff',
-//   yearOfBirth: '1945',
-//   job: 'self employed',
-// }
+// ES5
+var name5 = 'Jane Smith'
+var age5 = 23
+name5 = 'Jane Miller'
+console.log(name5)
 
-// / New way using constructors
-class Person {
-  constructor(name, yearOfBirth, job) {
-    this.name = name
-    this.lastName = 'Teague'
-    this.yearOfBirth = yearOfBirth
-    this.job = job
+function driversLicence(test) {
+  if (test === 'passed') {
+    var firstName = 'John'
+    var birthYear = 1990
+
+    console.log(
+      firstName +
+        ' born in ' +
+        birthYear +
+        ', is now officially is allowed to drive'
+    )
   }
+}
+driversLicence('passed')
 
-  calculateAge() {
-    const now = new Date().getFullYear()
-    console.log(now - this.yearOfBirth)
-  }
+// ES6
+let name6 = 'Jane Smith'
+const age6 = 23
+name6 = 'Jane Miller'
+console.log(name6)
 
-  retirement() {
-    const yearOfBirth = calculateAge(this.yearOfBirth)
-    const retire = 70 - yearOfBirth
-    if (retire > 0) {
-      console.log(`${this.name} retires in ${retire} years`)
-    } else {
-      console.log(`${this.name} has retired or is due for retirement`)
-    }
+const driversLicence2 = (test) => {
+  if (test === 'passed') {
+    const firstName = 'John'
+    const birthYear = 1990
+
+    console.log(
+      `${firstName} born in ${birthYear} , is now officially is allowed to drive`
+    )
   }
 }
 
-Person.prototype.middleName = 'Morris' // ES5 way
+driversLicence2('passed')
 
-const jeff = new Person('Jeff', 1945, 'self employed')
-jeff.calculateAge()
-jeff.retirement()
-console.log(jeff)
-console.log(jeff.lastName)
-console.log(jeff.middleName)
+// / Blocks & IIFEs
 
-// / Object create
-
-const personProto = {
-  calculateTheAge() {
-    const now = new Date().getFullYear()
-    console.log(now - this.yearOfBirth)
-  },
+// Block ES6
+{
+  const a = 1
+  const b = 2
+  var c = 3
 }
 
-const george = Object.create(personProto)
-george.yearOfBirth = 1913
-console.log(george)
+console.log(c) // Can't call a or b as they are block scoped, where as 'var' is function scoped
 
-const lil = Object.create(personProto, {
-  name: { value: 'Lilian' },
-  yearOfBirth: { value: 1915 },
-  job: { value: 'unknown' },
+// ES5
+;(function () {
+  var c = 3
 })
 
-console.log(lil)
+// / Strings
+const firstName2 = 'Mathew'
+const lastName2 = 'Teague'
 
-// / Primitives vs objects
-/**
- * Variables with primitives hold the data within themselves
- * Variables with objects don't contain the object but points to the real object.
- */
+const name = `${firstName2} ${lastName2}`
 
-// Primitive
-let a = Math.round(Math.random()) + 1
-const b = a
-a = 46
-console.log(a)
-console.log(b)
+console.log(name.startsWith('M'))
+console.log(name.endsWith('e'))
+console.log(name.includes('e'), name)
+console.log(`${firstName2} `.repeat(4))
 
-// Object
-const obj1 = {
-  name: 'Test',
-  age: 35,
+// / Arrow functions
+
+const years2 = [1980, 1985, 1989, 1990, 1995]
+
+// ES5
+var ages5 = years2.map(function (el) {
+  return 2020 - el
+})
+console.log(ages5)
+
+// ES6
+let ages6 = years2.map((el) => 2020 - el)
+console.log(ages6)
+
+ages6 = years2.map((el, index) => `Age element ${index + 1}: ${2020 - el}.`)
+console.log(ages6)
+
+ages6 = years2.map((el, index) => {
+  const now = new Date().getFullYear()
+  const age = now - el
+  return `Age element ${index + 1}: ${age}.`
+})
+console.log(ages6)
+
+// ES5
+var box1 = {
+  color: 'green',
+  position: 1,
+  // eslint-disable-next-line object-shorthand
+  clickMe: function () {
+    var self = this
+    document.querySelector('.greenBox').addEventListener('click', function () {
+      var str =
+        'This is box number ' + self.position + ' and it is ' + self.color
+      console.log(str)
+    })
+  },
 }
-const obj2 = obj1
-obj1.age = 39
-console.log(obj1)
-console.log(obj2)
-
-// Functions
-const ageVar = 28
-const obj3 = {
-  name: 'Jonas',
-  city: 'Lisbon',
-}
-
-const change = (a, b) => {
-  a = 30
-  b.city = 'London'
-}
-
-// When primitvies are passed to functions a copy is created. It will never effect the top level variable
-// When an object is passed a reference that points to the original is passed.
-change(ageVar, obj3)
-
-console.log(ageVar)
-console.log(obj3.city)
-
-// / Pasing functions as arguments
-
-const yearsArray = [1989, 1990, 2000, 2005]
-
-const calcTheAge = (el) => {
-  const now = new Date().getFullYear() - 1
-  return now - el
-}
-
-const fullAges = (el) => {
-  return el >= 18
-}
-
-const arrayCalc = (arr, fn) => {
-  const arrRes = []
-  for (let i = 0; i < arr.length; i++) {
-    arrRes.push(fn(arr[i]))
-  }
-  return arrRes
-}
-
-const maxHeartRate = (el) => {
-  if (el >= 18 && el <= 81) {
-    return Math.round(206.9 - 0.67 * el)
-  } else {
-    return -1
-  }
-}
-
-const agesArray = arrayCalc(yearsArray, calcTheAge)
-console.log(agesArray)
-
-const isFullAges = arrayCalc(agesArray, fullAges)
-console.log(isFullAges)
-
-const heartRate = arrayCalc(agesArray, maxHeartRate)
-console.log(heartRate)
-
-// / Funstions returning functions
-
-const interviewQuestion = (job) => {
-  if (job === 'designer') {
-    return (name) =>
-      console.log(`${name}, can you please explain what UX design is?`)
-  } else if (job === 'teacher') {
-    return (name) => console.log(`What subject do you teach, ${name}?`)
-  } else {
-    return (name) => console.log('What do you do?')
-  }
-}
-
-const teacherQuestion = interviewQuestion('teacher')
-const designerQuestion = interviewQuestion('designer')
-const jobQuestion = interviewQuestion('developer')
-teacherQuestion('Joy')
-designerQuestion('Elodie')
-jobQuestion('Mat')
-
-interviewQuestion('teacher')('Mark')
-
-// / Immediatly invoke function expressions (IIFE)
-
-const game = () => {
-  const score = Math.round(Math.random() * 10) + 1
-  console.log(score >= 5)
-}
-game()
-
-// Running function on load and score var is no longer accessible outside function.
-// IIFE keeps code safe for example if the code is used and by someone else and they use the same vars then the IIFE vars will be safe and not effected.
-;((goodLuck) => {
-  const score = Math.round(Math.random() * 10) + 1
-  console.log(score >= 5 - goodLuck)
-})(3)
-
-// / Closures
-
-// Scope chain remains intake
-// Allows function variables to be used long after the function has returned
-// Closures happen automatically
-const retirementYears = (retire) => {
-  const a = ' years left until retirement.'
-  return (yearOfBirth) => {
-    const now = new Date().getFullYear() - 1
-    const age = now - yearOfBirth
-    console.log(retire - age + a)
-  }
-}
-
-const retirementUS = retirementYears(66)
-retirementUS(1989)
-const retirementUK = retirementYears(70)
-retirementUK(1989)
-
-retirementYears(70)(1990)
-
-// Rewritting interview questions with closures
-const questions = (job) => {
-  return (name) => {
-    if (job === 'designer') {
-      console.log(`${name}, can you please explain what UX design is?`)
-    } else if (job === 'teacher') {
-      console.log(`What subject do you teach, ${name}?`)
-    } else {
-      console.log(`${name} what do you do as a ${job}?`)
-    }
-  }
-}
-
-questions('teacher')('Bob')
-questions('developer')('Mat')
-
-// / Bind, call and apply
-
-class Speaker extends Person {
-  constructor(name, yearOfBirth, job) {
-    super(name, yearOfBirth, job)
-    this.time = new Date().getHours()
-  }
-
-  speech(style, time) {
-    let timeOfDay = time
-    if (!time) {
-      if (this.time > 0 && this.time < 12) {
-        timeOfDay = 'morning'
-      } else if (this.time >= 12 && this.time < 18) {
-        timeOfDay = 'afternoon'
-      } else {
-        timeOfDay = 'evening'
-      }
-    }
-    if (style === 'formal') {
-      console.log(
-        `Good ${timeOfDay}, Ladies and gentlemen! I'm ${this.name} a ${
-          this.job
-        } and I'm ${calculateAge(this.yearOfBirth)} years old.`
-      )
-    } else if (style === 'friendly') {
-      console.log(
-        `Yo! I'm ${this.name}, my job is ${this.job} and I'm ${calculateAge(
-          this.yearOfBirth
-        )} years old! Have a great ${timeOfDay}!!`
-      )
-    }
-  }
-}
-
-const karl = new Speaker('Karl Pots', 1987, 'Designer')
-const emily = new Person('Emily Morgan', 1865, 'Bandit')
-
-karl.speech('formal')
-karl.speech('friendly')
-
-karl.speech.call(emily, 'friendly', 'afternoon') // call allows extention
-
-// karl.speech.apply(emily, ['formal']) // Adds an array.
-
-// Bind creates a copy and stores it somewhere
-// Fixes pre-defined values to functions
-// First parameter of bind has to be the this.
-const karlStyle = karl.speech.bind(karl, 'formal')
-const emilyStyle = karl.speech.bind(emily, 'friendly')
-
-karlStyle('evening')
-emilyStyle('morning')
-
-// Extendinf previous example.
-const isAdult = (limit, el) => {
-  return el >= limit
-}
-
-const arrayAgeCalc = (arr, fn) => {
-  const arrRes = []
-  for (let i = 0; i < arr.length; i++) {
-    arrRes.push(fn(arr[i]))
-  }
-  return arrRes
-}
-
-const newAges = arrayAgeCalc(yearsArray, calcTheAge)
-const fullJapan = arrayAgeCalc(newAges, isAdult.bind(this, 20))
-console.log(newAges)
-console.log(fullJapan)
-
-// / Challenge 6
-;(() => {
-  let qScore = 0
-
-  class Question {
-    constructor(question, answer, correct) {
-      this.question = question
-      this.answer = answer
-      this.correct = correct
-    }
-
-    displayQuestion() {
-      console.log(this.question)
-      for (let i = 0; i < this.answer.length; i++) {
-        console.log(this.answer[i])
-      }
-      return this
-    }
-
-    displayAnswer(ans, next) {
-      ans = Number(ans)
-
-      if (ans === this.correct) {
-        console.log('Your on fire! That is the correct answer.')
-        qScore += 1
-      } else {
-        console.log('Aww bad luck old chum, that was the wrong answer.')
-
-        if (qScore > 0) {
-          qScore -= 1
-        }
-      }
-      console.log(typeof ans, ans)
-      console.log(typeof this.correct, this.correct)
-      console.log(`You have a current score of: ${qScore}`)
-    }
-  }
-
-  const q1 = new Question('Is JavaScript cool?', ['0. Yes', '1. No'], 0)
-  const q2 = new Question(
-    'Which answer is correct for the sum of 2+2?',
-    ['0. 2', '1. 6', '2. 3', '3. 4'],
-    3
-  )
-  const q3 = new Question(
-    'What colour is the sun?',
-    ['0. Blue', '1. Green', '2. Yellow'],
-    2
-  )
-
-  const arrQuestions = [q1, q2, q3]
-
-  const nextQuestion = () => {
-    const randomQuestion = Math.round(Math.random() * arrQuestions.length)
-
-    arrQuestions[randomQuestion].displayQuestion()
-
-    const answer = prompt('What is the answer to the console question?')
-    console.log(typeof answer, answer)
-
-    if (answer !== 'exit' && answer !== null && answer !== '') {
-      arrQuestions[randomQuestion].displayAnswer(answer)
-      nextQuestion()
-    }
-  }
-
-  // nextQuestion()
-})()
-
-// / Instructor Solution
-;(function () {
-  function InstructorQuestion(question, answers, correct) {
-    this.question = question
-    this.answers = answers
-    this.correct = correct
-  }
-
-  InstructorQuestion.prototype.showQuestion = function () {
-    console.log(this.question)
-    for (let i = 0; i < this.answers.length; i++) {
-      console.log(`${i}: ${this.answers[i]}`)
-    }
-  }
-  InstructorQuestion.prototype.checkAnswer = function (ans, callback) {
-    let sc
-    if (ans === this.correct) {
-      console.log('Correct answer!')
-      sc = callback(true)
-    } else {
-      console.log('Wrong answer. Try again.')
-      sc = callback(false)
-    }
-
-    this.displayScore(sc)
-  }
-  InstructorQuestion.prototype.displayScore = function (score) {
-    console.log(`Your current score is: ${score}`)
-    console.log('--------------------------------')
-  }
-
-  const instructorQ1 = new InstructorQuestion(
-    'Is JavaScript the coolest programming language in the world?',
-    ['Yes', 'No'],
-    0
-  )
-  const instructorQ2 = new InstructorQuestion(
-    "What is the name of this course's teacher?",
-    ['John', 'Micheal', 'Jonas'],
-    2
-  )
-  const instructorQ3 = new InstructorQuestion(
-    'What best describes coding?',
-    ['Boring', 'Hard', 'Fun', 'Tedius'],
-    2
-  )
-
-  const instructorQuestions = [instructorQ1, instructorQ2, instructorQ3]
-
-  function instructorScore() {
-    let sc = 0
-    return function (correct) {
-      if (correct) {
-        sc++
-      }
-      return sc
-    }
-  }
-
-  const keepScore = instructorScore()
-
-  function instructorNextQuestion() {
-    const n = Math.floor(Math.random() * instructorQuestions.length)
-
-    instructorQuestions[n].showQuestion()
-
-    // parseInt does the same as Number.
-    const instructorAnswer = prompt('Please select the correct answer')
-
-    if (instructorAnswer !== 'exit') {
-      instructorQuestions[n].checkAnswer(parseInt(instructorAnswer), keepScore)
-      instructorNextQuestion()
-    }
-  }
-
-  // instructorNextQuestion()
-})()
+box1.clickMe()
