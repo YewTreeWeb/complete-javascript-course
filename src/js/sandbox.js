@@ -1,3 +1,8 @@
+/* eslint-disable prefer-spread */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-param-reassign */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable block-scoped-var */
 /* eslint-disable func-names */
 /* eslint-disable no-unused-expressions */
@@ -767,17 +772,181 @@ ages6 = years2.map((el, index) => {
 console.log(ages6)
 
 // ES5
-var box1 = {
+var boxES5 = {
   color: 'green',
   position: 1,
   // eslint-disable-next-line object-shorthand
   clickMe: function () {
     var self = this
-    document.querySelector('.greenBox').addEventListener('click', function () {
-      var str =
-        'This is box number ' + self.position + ' and it is ' + self.color
+    document
+      .querySelector('.box--green')
+      .addEventListener('click', function () {
+        var str =
+          'This is box number ' + self.position + ' and it is ' + self.color
+        console.log(str)
+      })
+  },
+}
+// boxES5.clickMe()
+
+function Test1(name) {
+  this.name = name
+}
+
+// eslint-disable-next-line prettier/prettier
+Test1.prototype.myFriends = function (friends) {
+  // eslint-disable-next-line prettier/prettier
+  var arr = friends.map(
+    function (el) {
+      return this.name + ' is friends with ' + el
+    }.bind(this)
+  )
+  console.log(arr)
+}
+
+var friends = ['Bob', 'Jane', 'Mark']
+new Test1('John').myFriends(friends)
+
+// ES6
+const boxES6 = {
+  color: 'green',
+  position: 1,
+  clickMe() {
+    document.querySelector('.box--green').addEventListener('click', () => {
+      const str = `This is box number ${this.position} and it is ${this.color}`
       console.log(str)
     })
   },
 }
-box1.clickMe()
+boxES6.clickMe()
+
+function Test2(name) {
+  this.name = name
+}
+
+Test2.prototype.myFriendsES6 = function (friends) {
+  const arr = friends.map((el) => `${this.name} is friends with ${el}`)
+  console.log(arr)
+}
+
+class Test3 {
+  constructor(name) {
+    this.name = name
+  }
+
+  myFriendsES6(friends) {
+    const arr = friends.map((el) => {
+      return this.name + ' is friends with ' + el
+    })
+    console.log(arr)
+  }
+}
+
+new Test2('Mike').myFriendsES6(friends)
+new Test3('Steve').myFriendsES6(friends)
+
+// / Destructuring
+
+// ES5
+var karl = ['Karl', 26]
+var nameKarl = karl[0]
+var ageKarl = karl[1]
+
+// ES6
+const [karlName, karlAge] = ['Karl', 26]
+console.log(karlName, karlAge)
+
+const obj2 = {
+  first: 'Karl',
+  last: 'Bobby',
+}
+
+const { first, last } = obj2
+console.log(first, last)
+
+const calcRetireES6 = (year) => {
+  const age = new Date().getFullYear() - year
+  return [age, 65 - age]
+}
+
+const [newAge, newRetire] = calcRetireES6(1990)
+console.log(newAge)
+console.log(newRetire)
+
+// / Arrays
+
+const boxes = document.querySelectorAll('.box')
+const agesTest = [12, 17, 8, 21, 14, 11]
+
+// ES5
+var boxesArrES5 = Array.prototype.slice.call(boxes)
+boxesArrES5.forEach(function (cur) {
+  cur.style.background = 'red'
+})
+for (var j = 0; j < boxesArrES5.length; j++) {
+  if (boxesArrES5[j].className === 'box box--red') {
+    continue
+    // break
+  }
+
+  boxesArrES5[j].textContent = 'I Changed to red'
+}
+
+var full = agesTest.map(function (cur) {
+  return cur >= 18
+})
+console.log(full, 'position in array: ' + full.indexOf(true))
+console.log(agesTest[full.indexOf(true)])
+
+// ES6
+const boxesArrES6 = Array.from(boxes)
+boxesArrES6.forEach((cur) => (cur.style.background = 'dodgerblue'))
+// forof loop combines the for loop with the forEach loop, allowing for continues and breaks like an original for loop
+for (const el of boxesArrES6) {
+  if (el.className.includes('box--blue')) {
+    continue
+  }
+
+  el.textContent = 'I Changed to blue'
+}
+
+// findIndex works like the map and forEach methods
+console.log(agesTest.findIndex((cur) => cur >= 18))
+console.log(agesTest.find((cur) => cur >= 18)) // does the same as agesTest[full.indexOf(true)]
+
+// / Spread operator
+function addFourAges(a, b, c, d) {
+  return a + b + c + d
+}
+
+// ES5
+
+var sum1 = addFourAges(18, 30, 12, 21)
+console.log(sum1)
+
+var numbers = [18, 30, 12, 21]
+var sum2 = addFourAges.apply(null, numbers)
+console.log(sum2)
+
+// ES6
+
+const sum3 = addFourAges(...numbers) // expands the array into it's component
+console.log(sum3)
+
+const familyTeague = ['Alice', 'Lily', 'Pam', 'Mathew']
+const familyMcMurtrie = ['Andrew', 'Julie', 'Poppy', 'Clare']
+const marriedFamily = [
+  ...familyTeague,
+  'Tressa',
+  'Chloe',
+  'Sophie',
+  ...familyMcMurtrie,
+]
+console.log(marriedFamily)
+
+const h = document.querySelector('.boxes-heading')
+const boxesSpread = document.querySelectorAll('.box')
+const all = [h, ...boxesSpread]
+Array.from(all).forEach((cur) => {
+  cur.style.color = 'purple'
+})
