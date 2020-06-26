@@ -1193,6 +1193,15 @@ const ages = (number, ...years) => {
   return Math.round(age / number)
 }
 
+const streetLengths = (number, ...lengths) => {
+  let totalLength = 0
+  lengths.forEach((cur) => {
+    totalLength += cur
+  })
+  const averageLength = totalLength / number
+  return { totalLength, averageLength }
+}
+
 const parks = new Map()
 parks.set('ocean', new Park('Ocean Park', 1825, 532, 60))
 parks.set('green', new Park('Greenfield Park', 1924, 378, 100))
@@ -1209,6 +1218,9 @@ console.log(streets.get('fairy'))
 console.log(parks.size)
 console.log(streets.size)
 
+const parkReport = document.querySelector('.parks-report')
+const streetReport = document.querySelector('.streets-report')
+
 console.log('--- PARKS REPORT ---')
 console.log(
   `Our ${parks.size} parks have an average age of ${ages(
@@ -1218,13 +1230,44 @@ console.log(
     parks.get('national').buildYear
   )} years`
 )
+parkReport.innerHTML = `
+<li>
+Our ${parks.size} parks have an average age of ${ages(
+  parks.size,
+  parks.get('ocean').buildYear,
+  parks.get('green').buildYear,
+  parks.get('national').buildYear
+)} years
+</li>`
 for (const [key, value] of parks.entries()) {
   console.log(
     `${
       value.name
     } has a tree density of ${value.density()} trees per square mile`
   )
+  parkReport.innerHTML += `<li>${
+    value.name
+  } has a tree density of ${value.density()} trees per square mile</li>`
+
   if (value.trees >= 1000) {
     console.log(`${value.name} has ${value.trees} trees.`)
+    parkReport.innerHTML += `<li>${value.name} has ${value.trees} trees.</li>`
   }
+}
+
+console.log('--- STREET REPORT ---')
+const { totalLength, averageLength } = streetLengths(
+  streets.size,
+  streets.get('fairy').length,
+  streets.get('donald').length,
+  streets.get('glyn').length,
+  streets.get('glynn').length
+)
+console.log(
+  `${streets.size} streets have a total length of ${totalLength} miles, with an average of ${averageLength} miles.`
+)
+streetReport.innerHTML = `<li>${streets.size} streets have a total length of ${totalLength} miles, with an average of ${averageLength} miles.</li>`
+for (const [key, value] of streets.entries()) {
+  console.log(`${value.name}, built in ${value.buildYear}, is a ${value.size}.`)
+  streetReport.innerHTML += `<li>${value.name}, built in ${value.buildYear}, is a ${value.size} street.</li>`
 }
