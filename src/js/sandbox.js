@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable prefer-spread */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-return-assign */
@@ -950,3 +951,280 @@ const all = [h, ...boxesSpread]
 Array.from(all).forEach((cur) => {
   cur.style.color = 'purple'
 })
+
+// / Rest Parameter
+
+/**
+ * Uses same notation as spread but is the exact oposite
+ * Spread - takes and array and transforms it into single values
+ * Rest - takes single values and transforms them into an array. It is an array like structure but not a true array
+ */
+
+// ES5
+
+// function isFullAgeES5() {
+//   // eslint-disable-next-line prefer-rest-params
+//   console.log(arguments)
+//   // eslint-disable-next-line prefer-rest-params
+//   var argsArr = Array.prototype.slice.call(arguments)
+//   argsArr.forEach(function (cur) {
+//     console.log(new Date().getFullYear() - cur >= 18)
+//   })
+// }
+
+function isFullAgeES5(limit) {
+  // eslint-disable-next-line prefer-rest-params
+  console.log(arguments)
+  // eslint-disable-next-line prefer-rest-params
+  var argsArr = Array.prototype.slice.call(arguments, 1)
+
+  console.log(argsArr)
+
+  argsArr.forEach(function (cur) {
+    console.log(new Date().getFullYear() - cur >= limit)
+  })
+}
+
+isFullAgeES5(18, 1990, 1999, 1965, 2016)
+
+// ES6
+
+// function isFullAgeES6(...years) {
+//   console.log(years)
+//   years.forEach((cur) => {
+//     console.log(new Date().getFullYear() - cur >= 18)
+//   })
+// }
+
+function isFullAgeES6(limit, ...years) {
+  console.log(years)
+  years.forEach((cur) => {
+    console.log(new Date().getFullYear() - cur >= limit)
+  })
+}
+
+isFullAgeES6(18, 1990, 1999, 1965, 2016)
+
+// / Default Parameters
+
+// ES5
+function SmithPersonES5(firstName, yearOfBirth, lastName, nationality) {
+  lastName === undefined ? (lastName = 'Smith') : lastName
+  nationality === undefined ? (nationality = 'English') : nationality
+
+  this.firstName = firstName
+  this.lastName = lastName
+  this.yearOfBirth = yearOfBirth
+  this.nationality = nationality
+}
+
+var bob = new SmithPersonES5('Bob', 1990)
+var emily = new SmithPersonES5('Emily', 1983, 'Diaz', 'Spanish')
+console.log(bob, emily)
+
+// ES6
+function SmithPersonES6(
+  firstName,
+  yearOfBirth,
+  lastName = 'Smith',
+  nationality = 'English'
+) {
+  this.firstName = firstName
+  this.lastName = lastName
+  this.yearOfBirth = yearOfBirth
+  this.nationality = nationality
+}
+
+const tom = new SmithPersonES6('John', 1990)
+const paula = new SmithPersonES6('Paula', 1983, 'Diaz', 'Spanish')
+console.log(tom, paula)
+
+// / Map
+
+const question = new Map()
+question.set(
+  'question',
+  'What is the offical name of the latest major JavaScript version?'
+)
+question.set(1, 'ES5')
+question.set(2, 'ES6')
+question.set(3, 'ES2015')
+question.set(3, 'ES7')
+question.set('correct', 3)
+question.set(true, 'Correct answer!')
+question.set(false, 'That was wrong answer')
+
+console.log(question.get('question'))
+console.log(question.size)
+
+if (question.has(4)) {
+  question.delete(4)
+}
+
+// question.clear() - deletes all
+
+question.forEach((value, key) => {
+  console.log(`This is ${key}, and it's set to ${value}`)
+})
+
+for (const [key, value] of question.entries()) {
+  if (typeof key === 'number') {
+    console.log(`Answer ${key}: ${value}`)
+  }
+}
+
+// const ans = Number(prompt('Write the correct answer'))
+// console.log(question.get(ans === question.get('correct')))
+
+// / Classes
+
+// ES5
+var PersonES5 = function (name, yearOfBirth, job) {
+  this.name = name
+  this.yearOfBirth = yearOfBirth
+  this.job = job
+}
+
+PersonES5.prototype.calculateTheAge = function () {
+  var ageES5 = new Date().getFullYear()
+  ageES5 -= this.yearOfBirth
+  console.log(this.name + ' is ' + age + ' years old')
+}
+
+var johnES5 = new PersonES5('John', 1990, 'teacher')
+console.log(johnES5)
+
+var AtheleteES5 = function (name, yearOfBirth, job, olymicGames, medals) {
+  PersonES5.call(this, name, yearOfBirth, job)
+  this.olymicGames = olymicGames
+  this.medals = medals
+}
+
+AtheleteES5.prototype = Object.create(PersonES5.prototype)
+
+var markES5 = new AtheleteES5('Mark', 1984, 'swimmer', 3, 10)
+console.log(markES5)
+
+AtheleteES5.prototype.wonMedal = function () {
+  this.medals++
+  console.log(this.name + ' has won ' + this.medals)
+}
+johnES5.calculateTheAge()
+markES5.wonMedal()
+// markES5.calculateTheAge()
+
+// ES6
+class PersonES6 {
+  constructor(name, yearOfBirth, job) {
+    this.name = name
+    this.yearOfBirth = yearOfBirth
+    this.job = job
+  }
+
+  calculateTheAge() {
+    const age = new Date().getFullYear()
+    console.log(`${this.name} is ${age - this.yearOfBirth} years old`)
+  }
+
+  static greeting() {
+    console.log('Hello there!')
+  }
+}
+
+const johnES6 = new PersonES6('John ES6', 1990, 'teacher')
+PersonES6.greeting()
+console.log(johnES6)
+
+class AtheleteES6 extends PersonES6 {
+  constructor(name, yearOfBirth, job, olymicGames, medals) {
+    super(name, yearOfBirth, job)
+    this.olymicGames = olymicGames
+    this.medals = medals
+  }
+
+  wonMedal() {
+    this.medals++
+    console.log(`${this.name} has won ${this.medals}`)
+  }
+}
+
+const markES6 = new AtheleteES6('Mark', 1984, 'swimmer', 3, 10)
+console.log(markES6)
+markES6.wonMedal()
+markES6.calculateTheAge()
+
+// / Challenge 8
+
+class Elements {
+  constructor(name, buildYear) {
+    this.name = name
+    this.buildYear = buildYear
+  }
+}
+
+class Park extends Elements {
+  constructor(name, buildYear, trees, area) {
+    super(name, buildYear)
+    this.trees = trees
+    this.area = area
+  }
+
+  density() {
+    // calculate the tree density of each park.
+    return Math.round(this.trees / this.area)
+  }
+}
+
+class Street extends Elements {
+  constructor(name, buildYear, length, size = 'normal') {
+    super(name, buildYear)
+    this.length = length
+    this.size = size
+  }
+}
+
+const ages = (number, ...years) => {
+  // calculate the average age of a street or park.
+  let age = 0
+  const now = new Date().getFullYear()
+  years.forEach((cur) => {
+    age += now - cur
+  })
+  return Math.round(age / number)
+}
+
+const parks = new Map()
+parks.set('ocean', new Park('Ocean Park', 1825, 532, 60))
+parks.set('green', new Park('Greenfield Park', 1924, 378, 100))
+parks.set('national', new Park('National Park', 1500, 3204, 400))
+
+const streets = new Map()
+streets.set('fairy', new Street('Fairy Road', 1945, 10))
+streets.set('donald', new Street('Donald Yakult Street', 1856, 40, 'long'))
+streets.set('glyn', new Street('Glyn Road', 1954, 2, 'tiny'))
+streets.set('glynn', new Street('Glynn Farm Road', 1955, 6, 'small'))
+
+console.log(parks.get('ocean'))
+console.log(streets.get('fairy'))
+console.log(parks.size)
+console.log(streets.size)
+
+console.log('--- PARKS REPORT ---')
+console.log(
+  `Our ${parks.size} parks have an average age of ${ages(
+    parks.size,
+    parks.get('ocean').buildYear,
+    parks.get('green').buildYear,
+    parks.get('national').buildYear
+  )} years`
+)
+for (const [key, value] of parks.entries()) {
+  console.log(
+    `${
+      value.name
+    } has a tree density of ${value.density()} trees per square mile`
+  )
+  if (value.trees >= 1000) {
+    console.log(`${value.name} has ${value.trees} trees.`)
+  }
+}
