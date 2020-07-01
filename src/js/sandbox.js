@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable prefer-spread */
 /* eslint-disable no-restricted-syntax */
@@ -1271,3 +1272,93 @@ for (const [key, value] of streets.entries()) {
   console.log(`${value.name}, built in ${value.buildYear}, is a ${value.size}.`)
   streetReport.innerHTML += `<li>${value.name}, built in ${value.buildYear}, is a ${value.size} street.</li>`
 }
+
+// / Challenge 8 - instructor
+
+class InstructorElement {
+  constructor(name, buildYear) {
+    this.name = name
+    this.buildYear = buildYear
+  }
+}
+
+class InstructorPark extends InstructorElement {
+  constructor(name, buildYear, area, numTrees) {
+    super(name, buildYear)
+    this.area = area
+    this.numTrees = numTrees
+  }
+
+  treeDensity() {
+    // calculate the tree density of each park.
+    const density = this.numTrees / this.area
+    console.log(
+      `${this.name} has a tree density of ${density} trees per square km`
+    ) // For console logging you don't need to return
+  }
+}
+
+class InstructorStreet extends InstructorElement {
+  constructor(name, buildYear, length, size = 3) {
+    super(name, buildYear)
+    this.length = length
+    this.size = size
+  }
+
+  classifyStreet() {
+    const classification = new Map()
+    classification.set(1, 'tiny')
+    classification.set(2, 'small')
+    classification.set(3, 'normal')
+    classification.set(4, 'big')
+    classification.set(5, 'huge')
+    console.log(
+      `${this.name}, build in ${this.buildYear}, is a ${classification.get(
+        this.size
+      )}`
+    )
+  }
+}
+
+const allParks = [
+  new InstructorPark('Green Park', 1997, 0.2, 215),
+  new InstructorPark('National Park', 1894, 2.9, 3541),
+  new InstructorPark('Oak Park', 1953, 0.4, 949),
+]
+
+const allStreets = [
+  new InstructorStreet('Ocean Avenue', 1999, 1.1, 4),
+  new InstructorStreet('Evergreen Street', 2008, 2.7, 2),
+  new InstructorStreet('4th Street', 2015, 0.8),
+  new InstructorStreet('Sunset Boulevard', 1982, 2.5, 5),
+]
+
+function calc(arr) {
+  const sum = arr.reduce((prev, cur, index) => prev + cur, 0)
+  // [3, 5, 6]
+  // First iteration would be 0 + 3 = 3
+  // Second would be 3 + 5 = 8
+  // Third would be 8 + 6 = 14
+  // Overall value would be 14
+
+  return [sum, sum / arr.length]
+}
+
+function reportParks(p) {
+  console.log('--- Instructor Parks Report ---')
+  // Density
+  p.forEach((e) => e.treeDensity())
+  // Average age
+  const ages = p.map((el) => new Date().getFullYear() - el.buildYear)
+  const [totalAge, avgAge] = calc(ages)
+  console.log(`Our ${p.length} parks have an average of ${avgAge} years.`)
+
+  // Which park has more than 1000 trees
+}
+
+function reportStreets(s) {
+  console.log('--- Instructor Streets Report ---')
+}
+
+reportParks(allParks)
+reportStreets(allStreets)
