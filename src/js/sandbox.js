@@ -1315,7 +1315,7 @@ class InstructorStreet extends InstructorElement {
     console.log(
       `${this.name}, build in ${this.buildYear}, is a ${classification.get(
         this.size
-      )}`
+      )} street`
     )
   }
 }
@@ -1334,12 +1334,16 @@ const allStreets = [
 ]
 
 function calc(arr) {
-  const sum = arr.reduce((prev, cur, index) => prev + cur, 0)
-  // [3, 5, 6]
-  // First iteration would be 0 + 3 = 3
-  // Second would be 3 + 5 = 8
-  // Third would be 8 + 6 = 14
-  // Overall value would be 14
+  const sum = arr.reduce((prev, cur) => prev + cur, 0)
+  /**
+   * Reduces an array to a single value. Great for adding up numbers in an array.
+   *
+   * [3, 5, 6]
+   * First iteration would be 0 + 3 = 3
+   * Second would be 3 + 5 = 8
+   * Third would be 8 + 6 = 14
+   * Overall value would be 14
+   */
 
   return [sum, sum / arr.length]
 }
@@ -1354,11 +1358,160 @@ function reportParks(p) {
   console.log(`Our ${p.length} parks have an average of ${avgAge} years.`)
 
   // Which park has more than 1000 trees
+  const i = p.map((el) => el.numTrees).findIndex((el) => el >= 1000)
+  console.log(`${p[i].name} has or has more than 1000 trees`)
 }
 
 function reportStreets(s) {
   console.log('--- Instructor Streets Report ---')
+  // Total and average lengeth of the town's streets
+  const [totalLength, avgLength] = calc(s.map((el) => el.length))
+  console.log(
+    `Our ${s.length} streets have a total length of ${totalLength} km, with an average of ${avgLength} km.`
+  )
+  // Classifiy size
+  s.forEach((e) => e.classifyStreet())
 }
 
 reportParks(allParks)
 reportStreets(allStreets)
+
+/* Asynchronous JavaScript: Promises, Async/Await and AJAX */
+
+const secondAsync = () => {
+  setTimeout(() => {
+    console.log('Async hey there')
+  }, 2000)
+}
+
+const firstAsync = () => {
+  console.log('Hey there!')
+  secondAsync()
+  console.log('The end')
+}
+
+firstAsync()
+
+// function getRecipe() {
+//   setTimeout(() => {
+//     const recipeID = [100, 232, 345, 4678]
+//     console.log(recipeID)
+
+//     setTimeout(
+//       (id) => {
+//         const recipe = { title: 'Cake', publisher: 'Mathew' }
+//         console.log(`${id}: ${recipe.title} By: ${recipe.publisher}`)
+//         setTimeout(
+//           (publisher) => {
+//             const recipe = { title: 'Pizza', publisher: 'Mathew' }
+//             console.log(recipe)
+//           },
+//           1500,
+//           recipe.publisher
+//         )
+//       },
+//       1000,
+//       recipeID[2]
+//     )
+//   }, 1500)
+// }
+// getRecipe()
+
+// / Promises
+const getIDs = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve([100, 232, 345, 4678])
+  }, 1500)
+})
+
+const getRecipe = (recID) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(
+      (ID) => {
+        const recipe = { title: 'Cake', publisher: 'Mathew' }
+        resolve(`${ID}: ${recipe.title} By: ${recipe.publisher}`)
+      },
+      1500,
+      recID
+    )
+  })
+}
+
+const getRelated = (publisher) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(
+      (pub) => {
+        const recipe = { title: 'Pizza', publisher: 'Mathew' }
+        resolve(`${pub}: ${recipe.title}`)
+      },
+      1500,
+      publisher
+    )
+  })
+}
+
+getIDs
+  .then((IDs) => {
+    console.log(IDs)
+    return getRecipe(IDs[2])
+  })
+  .then((recipe) => {
+    console.log(recipe)
+    return getRelated('Mathew')
+  })
+  .then((recipe) => {
+    console.log(recipe)
+  })
+  .catch((err) => console.error(err))
+
+// / Async Await
+
+/**
+ * async function getRecipesAW() {
+ * or
+ * const getRecipesAW = async () => {
+ *
+ * Async Await doesn't create promises but handles them
+ */
+const getRecipesAW = async () => {
+  const IDs = await getIDs
+  console.log(IDs)
+  const recipe = await getRecipe(IDs[3])
+  console.log(recipe)
+  const related = await getRelated('Mathew Teague')
+  console.log(related)
+  return recipe
+}
+
+getRecipesAW().then((result) => console.log(`${result} is the best!`))
+
+// / AJAX and APIs
+const getDummyData = (number) => {
+  fetch(`https://jsonplaceholder.typicode.com/todos/${number || ''}`)
+    .then((result) => {
+      console.log(result)
+      return result.json()
+    })
+    .then((data) => {
+      console.log(data)
+      console.log(`The title of the data is ${data.title}`)
+    })
+    .catch((err) => console.error(err))
+}
+getDummyData(1)
+
+const getDummyDataAsync = async (number) => {
+  let data
+  try {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/todos/${number || ''}`
+    )
+    data = await response.json()
+  } catch (error) {
+    console.error(error)
+  }
+  return data
+}
+getDummyDataAsync(1)
+  .then((data) => console.log(data, `The title of the data is ${data.title}`))
+  .catch((error) => console.error(error))
